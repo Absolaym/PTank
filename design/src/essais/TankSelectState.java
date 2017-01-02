@@ -20,7 +20,7 @@ public class TankSelectState extends BasicGameState {
 	private static final int ID = 2;
 	
 	//nombre de tanks à générer, taille des tanks, taille des boites
-	private static final int NB_TANK = 8, TANK_WIDTH = 32, TANK_HEIGHT = 48,
+	private static final int NB_TANK = 10, TANK_WIDTH = 32, TANK_HEIGHT = 48,
 							 BOX_WIDTH = 100, BOX_HEIGHT = 100;
 	
 	//boites qui vont entourer les tanks
@@ -56,7 +56,7 @@ public class TankSelectState extends BasicGameState {
 			}
 			
 			else {
-				boxes[i].setCenterX((i-3)*WINDOW_WIDTH/(NB_TANK/2+1));
+				boxes[i].setCenterX((i-(NB_TANK/2-1))*WINDOW_WIDTH/(NB_TANK/2+1));
 				boxes[i].setCenterY((WINDOW_HEIGHT + WINDOW_HEIGHT/4)/2 + BOX_HEIGHT);
 			}
 		}
