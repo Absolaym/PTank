@@ -69,7 +69,7 @@ public class Weapon extends Entity
 	}
 
 	@Override
-	public void update(float angleWeapon) throws SlickException 
+	public void update(GameContainer gc, int dt) throws SlickException 
 	{
 		// On calcule l'angle que doit avoir le weapon
 		float mouseX = gc.getInput().getMouseX();
@@ -89,7 +89,7 @@ public class Weapon extends Entity
     		angle += 180;
     	}
 		
-		this.setAngle(angleWeapon);
+		this.setAngle(angle);
 		this.setCenterX(tank.getCenterX());
 		this.setCenterY(tank.getCenterY());
 		this.speed = 8;
