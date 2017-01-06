@@ -23,6 +23,7 @@ public abstract class Entity
 	protected float angle; // in degrees. 0 is EAST, 90 is SOUTH, 180 is WEST, 270 is NORTH
 	protected float speed;
 	protected Color color = Color.white;
+	protected Skin skin;
 	
 	// --------------------------------------------
 	// -------------- Methods ---------------------
@@ -45,6 +46,9 @@ public abstract class Entity
 	public float getCenterY() { return shape.getCenterY(); }
 	public void setCenterY(float y) { shape.setCenterY(y); }
 	
+	public float getSpeed() { return speed; }
+	public void setSpeed(float speed) { this.speed = speed; }
+	
 	public Color getColor() { return color; }
 	public void setColor(Color color) { this.color = color; }
 
@@ -53,6 +57,9 @@ public abstract class Entity
 	{
 		float deltaAngle = angle - this.angle;
 		shape = shape.transform(Transform.createRotateTransform((float) Math.toRadians(deltaAngle), this.getCenterX(), this.getCenterY()));
+		if(skin != null) {
+			skin.rotate((float) Math.toRadians(deltaAngle), shape.getCenterX(), shape.getCenterY());
+		}
 		this.angle = angle;
 	}
 	
@@ -62,6 +69,8 @@ public abstract class Entity
 		{
 			g.setColor(color);
 			g.fill(shape);
+			if(skin != null)
+				skin.render(g);
 		}
 	}
 	
@@ -71,6 +80,8 @@ public abstract class Entity
 		float yMove = dt * this.speed * (float) Math.sin(Math.toRadians(angle));
 	
 		this.shape = shape.transform(Transform.createTranslateTransform(xMove, yMove));
+		if(skin != null)
+			this.skin.move(xMove, yMove);
 	}
 	
 	public void destroy()

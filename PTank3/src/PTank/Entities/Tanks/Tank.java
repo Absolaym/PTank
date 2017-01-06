@@ -20,8 +20,6 @@ public abstract class Tank extends Entity
 	protected final static float CANON_WIDTH = 8;
 	protected final static float CANON_HEIGHT = 26;
 	
-	protected Shape[] skinShapes;
-	protected Color[] skinColors;
 	protected Weapon weapon;
 
 	
@@ -38,4 +36,9 @@ public abstract class Tank extends Entity
 	{
 		this.weapon.fire();
 	}
+	
+	public float getWidth() { return WIDTH; }
+	public float getHeight() { return HEIGHT; }
+	public float getCanonWidth() { return CANON_WIDTH; }
+	public float getCanonHeight() { return CANON_HEIGHT; }
 }

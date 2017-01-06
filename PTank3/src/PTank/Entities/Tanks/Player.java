@@ -1,12 +1,13 @@
 package PTank.Entities.Tanks;
 
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
 
+import PTank.Entities.Transform;
 import PTank.Entities.Weapon;
 import PTank.Map.Map;
 import PTank.Ressources.Ressources;
@@ -20,8 +21,7 @@ public class Player extends Tank
 	private final static int NB_BULLETS_MAX = 50;
 	
 	private boolean hasFired = false;
-
-	
+	public static boolean bouge = false;
 	
 	// --------------------------------------------
 	// -------------- Methods ---------------------
@@ -32,10 +32,18 @@ public class Player extends Tank
 		this.shape = new Polygon(Ressources.getShape("Player"));
 		this.setCenterX(x);
 		this.setCenterY(y);
+		this.shape = Transform.rotate(shape, (float) Math.toRadians(270), x, y);
 		this.speed = SPEED;
-		this.weapon = new Weapon(map, NB_BULLETS_MAX);
+		this.skin = new TankSkin(x, y, WIDTH, HEIGHT);
+		this.weapon = new Weapon(map, NB_BULLETS_MAX, x, y);
 		this.weapon.setTank(this);
 		this.color = new Color(1, 1, 1, 0.5f);
+	}
+	
+	@Override
+	public void render(GameContainer gc, Graphics g) throws SlickException {
+		skin.render(g);
+		weapon.render(gc, g);
 	}
 
 	@Override
@@ -43,8 +51,12 @@ public class Player extends Tank
 	{
 		Input input = gc.getInput();
 		
+		// On calcule l'angle que doit avoir le weapon
+		
+		this.weapon.update(gc.getInput().getMouseX(), gc.getInput().getMouseY());
+		
 		// calcul de bouge (le tank doit bouger) et angleDirection = angle du player
-		boolean bouge = true;
+		bouge = true;
 		float angleDirection = 0;
 		int x = 0;
 		int y = 0;
@@ -112,11 +124,10 @@ public class Player extends Tank
 		else if (x == 0  && y == 1) 	{ angleDirection = 270; }
 		else if (x == 1  && y == 1) 	{ angleDirection = 315; }
 		
-
-		
 		if (bouge)
 		{
 			this.setAngle(angleDirection);
+			this.weapon.move(dt);
 			this.move(dt);
 		}
 		
