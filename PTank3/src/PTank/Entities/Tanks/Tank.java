@@ -20,8 +20,6 @@ public abstract class Tank extends Entity
 	protected final static float CANON_WIDTH = 8;
 	protected final static float CANON_HEIGHT = 26;
 	
-	protected Shape[] skinShapes;
-	protected Color[] skinColors;
 	protected Weapon weapon;
 
 	
