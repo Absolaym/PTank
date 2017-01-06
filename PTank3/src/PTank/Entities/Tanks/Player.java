@@ -7,7 +7,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
 
-import PTank.Entities.Transform;
 import PTank.Entities.Weapon;
 import PTank.Map.Map;
 import PTank.Ressources.Ressources;
@@ -21,7 +20,8 @@ public class Player extends Tank
 	private final static int NB_BULLETS_MAX = 50;
 	
 	private boolean hasFired = false;
-	static boolean bouge = false;
+
+	
 	
 	// --------------------------------------------
 	// -------------- Methods ---------------------
@@ -32,12 +32,10 @@ public class Player extends Tank
 		this.shape = new Polygon(Ressources.getShape("Player"));
 		this.setCenterX(x);
 		this.setCenterY(y);
-		this.shape = Transform.rotate(shape, (float) Math.toRadians(270), x, y);
 		this.speed = SPEED;
 		this.weapon = new Weapon(map, NB_BULLETS_MAX);
 		this.weapon.setTank(this);
 		this.color = new Color(1, 1, 1, 0.5f);
-		this.skin = new TankSkin(x, y, 32, 32);
 	}
 
 	@Override
@@ -46,7 +44,7 @@ public class Player extends Tank
 		Input input = gc.getInput();
 		
 		// calcul de bouge (le tank doit bouger) et angleDirection = angle du player
-		bouge = true;
+		boolean bouge = true;
 		float angleDirection = 0;
 		int x = 0;
 		int y = 0;
