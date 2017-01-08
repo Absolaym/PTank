@@ -20,6 +20,8 @@ public abstract class Tank extends Entity
 	protected final static float CANON_WIDTH = 8;
 	protected final static float CANON_HEIGHT = 26;
 	
+	protected Shape[] skinShapes;
+	protected Color[] skinColors;
 	protected Weapon weapon;
 
 	
@@ -32,13 +34,28 @@ public abstract class Tank extends Entity
 	// in Ennemy subclasses; it 
 	public abstract void update(GameContainer gc, int dt) throws SlickException;
 	
-	public void fire()
+	@Override
+	public void render(GameContainer gc, Graphics g) throws SlickException
 	{
-		this.weapon.fire();
+		// render this
+		if (isAlive && isVisible)
+		{
+			g.setColor(color);
+			g.fill(shape);
+			if(skin != null)
+				skin.render(g);
+		}
+		
+		// render his weapon
+		this.weapon.render(gc, g);
 	}
 	
-	public float getWidth() { return WIDTH; }
-	public float getHeight() { return HEIGHT; }
-	public float getCanonWidth() { return CANON_WIDTH; }
-	public float getCanonHeight() { return CANON_HEIGHT; }
+	public boolean fire()
+	{
+		return this.weapon.fire();
+	}
+	
+	public Weapon getWeapon() { return this.weapon; }
+	
+	public abstract int getId();
 }

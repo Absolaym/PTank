@@ -69,11 +69,13 @@ public class Setup extends StateBasedGame
 		gc.setVSync(VSYNC);
 		
 		// add states
-		this.addState(new InGame());
 		this.addState(new TitleScreen());
 		this.addState(new Menu());
 		this.addState(new MenuLevelEditor());
-		
+		this.addState(new MenuLevelEditorNew());
+		this.addState(new Customization());
+		this.addState(new InGame());
+		this.addState(new LevelEditor());
 	}
 	
 	

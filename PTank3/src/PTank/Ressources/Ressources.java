@@ -40,6 +40,9 @@ public class Ressources
 		buttons.put("New Map", new Button("New Level", (Window.WIDTH / 2) - 150, 300f, 300f, 50f));	
 		buttons.put("Load Map", new Button("Load Level", (Window.WIDTH / 2) - 150, 400f, 300f, 50f));	
 		buttons.put("Main Menu", new Button("Return to main menu", (Window.WIDTH / 2) - 150, 600f, 300f, 50f));
+		
+		// Level Editor New level button
+		buttons.put("Go", new Button("Go", (Window.WIDTH / 2) - 150, 300f, 300f, 50f));	
 	}
 	
 	public static void loadImages()
@@ -56,6 +59,12 @@ public class Ressources
 		// Player shape
 		// tableau de points du player
 		float player[] = {0, 0,
+						  0, 32,
+						  32, 32,
+						  32, 0} ;
+		
+		// tableau de points du ennmyImmobile
+		float ennemyImmobile[] = {0, 0,
 						  0, 32,
 						  32, 32,
 						  32, 0} ;
@@ -77,6 +86,7 @@ public class Ressources
 		shapes.put("Player",  player);
 		shapes.put("Weapon",  weapon);
 		shapes.put("Bullet", bullet);
+		shapes.put("EnnemyImmobile", ennemyImmobile);
 
 	}
 	

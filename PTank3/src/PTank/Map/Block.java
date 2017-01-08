@@ -13,8 +13,8 @@ public abstract class Block extends Entity
 	// --------------------------------------------
 	// ------------- Attributes -------------------
 	// --------------------------------------------
-	private final static float BLOCK_WIDTH = 32;
-	private final static float BLOCK_HEIGHT = 32;
+	private final static float BLOCK_WIDTH = 20;
+	private final static float BLOCK_HEIGHT = 20;
 	protected boolean isBouncingBullets;
 	protected boolean isBlockingTanks;
 

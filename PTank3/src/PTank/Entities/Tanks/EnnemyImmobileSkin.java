@@ -11,7 +11,7 @@ import PTank.Entities.Transform;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 
-public class TankSkin extends Skin {
+public class EnnemyImmobileSkin extends Skin {
 	private static final int 	NB_SEG_CAT = 6, 
 								TANK = 0, TURRET = 1, 
 								LCAT_BG = 2, LCAT_OV = 3, LCAT_MV = 4,
@@ -21,7 +21,7 @@ public class TankSkin extends Skin {
 	private final float CAT_WIDTH, CAT_HEIGHT,
 						TURRET_WIDTH;
 	
-	public TankSkin(float x, float y, float width, float height) {
+	public EnnemyImmobileSkin(float x, float y, float width, float height) {
 		nbShapes = 8;
 		CAT_HEIGHT = height*1.1f;
 		CAT_WIDTH = CAT_HEIGHT/NB_SEG_CAT;
@@ -44,10 +44,10 @@ public class TankSkin extends Skin {
 		shapes[LCAT_MV] = Transform.translate(shapes[LCAT_MV], 0, CAT_WIDTH/2);
 		shapes[RCAT_MV] = Transform.translate(shapes[RCAT_MV], 0, CAT_WIDTH/2);
 		
-		colors[TANK] = new Color(30, 95, 5);
-		colors[TURRET] = new Color(90, 175, 35);
-		this.canonColor = new Color(90, 175, 35);
-		colors[CAT_BG] = new Color(140, 180, 140);
+		colors[TANK] = new Color(95, 5, 30);
+		colors[TURRET] = new Color(175, 35, 90);
+		this.canonColor = new Color(175, 35, 90);
+		colors[CAT_BG] = new Color(180, 140, 140);
 		colors[CAT_OV] = new Color(65, 35, 5);
 		
 		for(int i = 0; i < nbShapes; i++)
@@ -75,21 +75,4 @@ public class TankSkin extends Skin {
 		g.setColor(colors[TURRET]);
 		g.fill(shapes[TURRET]);
 	}
-	
-	@Override 
-	public void setCenter(float x, float y) {
-		float deltaX = x - shapes[TANK].getCenterX();
-		float deltaY = y - shapes[TANK].getCenterY();
-		for(int i = 0; i < nbShapes; i++)
-			shapes[i] = Transform.translate(shapes[i], deltaX, deltaY);
-	}
-	
-	public Color getTankColor() { return this.colors[TANK]; }
-	public void setTankColor(Color color) { this.colors[TANK] = color; }
-	
-	public Color getCatColor() { return this.colors[CAT_BG]; }
-	public void setCatColor(Color color) { this.colors[CAT_BG] = color; }
-	
-	public Color getTurretColor() { return this.colors[TURRET]; }
-	public void setTurretColor(Color color) { this.colors[TURRET] = color; }
 }

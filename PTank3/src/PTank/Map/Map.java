@@ -10,9 +10,13 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
+import PTank.Entities.Bullet;
 import PTank.Entities.Entity;
+import PTank.Entities.Tanks.Ennemy;
+import PTank.Entities.Tanks.EnnemyImmobile;
 import PTank.Entities.Tanks.Player;
 import PTank.Entities.Tanks.Tank;
+import PTank.Entities.Tanks.TitleTank;
 
 public class Map 
 {
@@ -20,9 +24,9 @@ public class Map
 	// ------------- Attributes -------------------
 	// --------------------------------------------
 	// taille fixe pour TOUTES les maps
-	private final static int _mapWidth = 32;
-	private final static int _mapHeight = 16;
-	private final static int _maxEntities = 10000;
+	private final static int _mapWidth = 80;
+	private final static int _mapHeight = 80;
+	private final static int _maxEnnemies = 1000;
 
 	// parser attributes
 	private char[][] _blocksChar;
@@ -30,8 +34,11 @@ public class Map
 
 	// une map, c'est des blocks, et des entités (tanks, missiles, etc..)
 	private Block[][] _blocks;
-	private Entity[] _entities;
-	private int _nbEntities;
+	
+	private Player _player;
+	private Ennemy[] _ennemies;
+	private int _nbEnnemies;
+	
 	
 	// --------------------------------------------
 	// -------------- Methods ---------------------
@@ -43,8 +50,8 @@ public class Map
 		_blocksChar = new char[_mapHeight][_mapWidth];
 		_blocks = new Block[_mapHeight][_mapWidth];
 		_filePath = filePath;
-		_entities = new Entity[_maxEntities];
-		_nbEntities = 0;
+		_ennemies = new Ennemy[_maxEnnemies];
+		_nbEnnemies = 0;
 	}
 	
 	// init
@@ -68,8 +75,19 @@ public class Map
 				}
 			}
 		}
+		// update de player
+		_player.update(gc, dt);
 		
+		// update des ennemies
+		for (int i = 0; i < _nbEnnemies; i++)
+		{
+			if (_ennemies[i] != null)
+			{
+				_ennemies[i].update(gc, dt);
+			}
+		}
 		// update de chaque Entity
+		/*
 		for (int i = 0; i < _nbEntities; i++)
 		{
 			if (_entities[i] != null)
@@ -77,6 +95,7 @@ public class Map
 				_entities[i].update(gc, dt);
 			}
 		}
+		*/
 	}
 	
 	//render
@@ -93,7 +112,18 @@ public class Map
 				}
 			}
 		}
+		// update de player
+		_player.render(gc, g);
 		
+		// update des ennemies
+		for (int i = 0; i < _nbEnnemies; i++)
+		{
+			if (_ennemies[i] != null)
+			{
+				_ennemies[i].render(gc, g);
+			}
+		}
+		/*
 		// rendu de chaque Entity
 		for (int i = 0; i < _nbEntities; i++)
 		{
@@ -102,6 +132,8 @@ public class Map
 				_entities[i].render(gc, g);
 			}
 		}
+		*/
+		
 		
 		// rendu de chaque Bloc sur les entity
 		for (Block[] rawOfBlocks : _blocks)
@@ -127,11 +159,23 @@ public class Map
 		return _blocks[(int) (y / Block.getHeight())][(int) (x / Block.getWidth())].isBlockingTanks(); 
 	}
 	
+	public void setPlayer(Player player) 
+	{ 
+		// need boucle for pour add l'entity quand on en trouve une nulle dans l'array
+		_player = player;
+	}
+	
+	public void addEnnemy(Ennemy ennemy)
+	{
+		_ennemies[_nbEnnemies] = ennemy;  _nbEnnemies++;
+	}
+	/*
 	public void addEntity(Entity ent) 
 	{ 
 		// need boucle for pour add l'entity quand on en trouve une nulle dans l'array
 		_entities[_nbEntities] = ent;  _nbEntities++;
 	}
+	*/
 	
 	// lit le _filePath pour remplir le tableau 2D de char
 	public void parse()
@@ -190,12 +234,21 @@ public class Map
     			else if (c == 'S')
     			{
     				_blocks[i][j] = new Ground(x, y);
-    				this.addEntity(new Player(this, x , y));
+    				this.setPlayer(new Player(this, x , y));
+    			}
+    			else if (c == 'T')
+    			{
+    				_blocks[i][j] = new Ground(x, y);
+    				this.setPlayer(new TitleTank(this, x , y));
+    			}
+    			else if (c == '1')
+    			{
+    				_blocks[i][j] = new Ground(x ,y);
+    				this.addEnnemy(new EnnemyImmobile(this, x , y));
     			}
     			else
     			{
     				_blocks[i][j] = new Ground(x ,y);
-    				// _entities.add(new Ennemy1/2/3 ...(x , y))
     			}
  
     		}
@@ -215,11 +268,28 @@ public class Map
 		System.out.println();
 	}
 	
+	public void clear()
+	{
+		for (int i = 0; i < _nbEnnemies; i++)
+		{
+			Bullet[] ennemyBullets = _ennemies[i].getWeapon().getBullets();
+			int nbEnnemyBullets = _ennemies[i].getWeapon().getNbBullets();
+			for (int j = 0; j < nbEnnemyBullets; j++)
+			{
+				ennemyBullets[i].destroy();
+			}
+			
+		}
+	}
+	
 	// getters
 	public int getMapWidth() { return _mapWidth; }
 	public int getMapHeight() { return _mapHeight; }
 	public Block[][] getBlocks() { return _blocks; }
-	public Entity[] getEntities() { return _entities; }
+	public Ennemy[] getEnnemies() { return _ennemies; }
+	public int getNbEnnemies() { return _nbEnnemies; }
+	public void decrementNbEnnemies() { _nbEnnemies--; }
+	public Player getPlayer() { return _player; }
 	
 	/*
 	public static void main(String args[])

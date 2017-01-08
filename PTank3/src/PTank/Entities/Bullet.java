@@ -6,6 +6,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
 
+import PTank.Entities.Tanks.Ennemy;
+import PTank.Entities.Tanks.Player;
 import PTank.Map.Map;
 import PTank.Ressources.Ressources;
 
@@ -14,8 +16,8 @@ public class Bullet extends Entity
 	// --------------------------------------------
 	// ------------- Attributes -------------------
 	// --------------------------------------------
-	private final static float SPEED = 0.2f;
-	private final static int NB_BOUNCES = 5;
+	private final static float SPEED = 0.18f;
+	private final static int NB_BOUNCES = 1;
 	
 	private int bouncesLeft = 1;
 	
@@ -24,12 +26,14 @@ public class Bullet extends Entity
 	private int prevXPos;
 	private int prevYPos;
 	
+	private Weapon weapon;
+	
 
 
 	// --------------------------------------------
 	// -------------- Methods ---------------------
 	// --------------------------------------------
-	public Bullet(Map map, float x, float y, float angle)
+	public Bullet(Map map, Weapon weapon, float x, float y, float angle)
 	{
 		this.map = map;
 		this.shape = new Polygon(Ressources.getShape("Bullet"));
@@ -38,12 +42,15 @@ public class Bullet extends Entity
 		this.setCenterX(x);
 		this.setCenterY(y);
 		this.setAngle(angle);
-		this.color = Color.red;
+		this.weapon = weapon;
+		this.color = this.weapon.getColor();
 		
 		xPos = map.getXPos(this);
 		yPos = map.getYPos(this);
 		prevXPos = xPos;
 		prevYPos = yPos;
+		
+		
 	}
 	
 	@Override
@@ -94,6 +101,35 @@ public class Bullet extends Entity
 		
 		prevXPos = xPos;
 		prevYPos = yPos;
+		
+		// update des hitbox pour détruire les Ennemy
+		if (weapon.getTank().getId() == 0)
+		{
+			Ennemy[] ennemies = this.map.getEnnemies();
+			int nbEnnemies = this.map.getNbEnnemies();
+			for (int i = 0; i < nbEnnemies; i++)
+			{
+				if (this.shape.intersects(ennemies[i].getShape()) && ennemies[i].isAlive())
+				{
+					ennemies[i].setAlive(false);
+					ennemies[i].getWeapon().setAlive(false);
+					this.setAlive(false);
+					//map.decrementNbEnnemies();
+				}
+			}
+		}
+		
+		// update des hitbox pour détruire Player
+		if (weapon.getTank().getId() > 0)
+		{
+			Player player = this.map.getPlayer();
+			if (this.shape.intersects(player.getShape()) && player.isAlive() && this.isAlive())
+			{
+				player.setAlive(false);
+				player.getWeapon().setAlive(false);
+				this.setAlive(false);
+			}
+		}
 	}
 
 	public void destroy()
@@ -104,5 +140,6 @@ public class Bullet extends Entity
 	
 	public int getBouncesLeft() { return bouncesLeft; }
 	public void setBouncesLeft(int bouncesLeft) { this.bouncesLeft = bouncesLeft; }
+	public void setWeapon(Weapon weapon) { this.weapon = weapon; }
 	
 }

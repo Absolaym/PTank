@@ -7,6 +7,7 @@ import org.newdawn.slick.geom.Shape;
 public abstract class Skin {
 	protected Shape shapes[];
 	protected Color colors[];
+	protected Color canonColor = Color.white;
 	
 	protected int nbShapes;
 	
@@ -38,4 +39,15 @@ public abstract class Skin {
 		for(int i = 0; i < nbShapes; i++)
 			shapes[i].setCenterX(y);
 	}
+	
+	public Color getCanonColor() { return this.canonColor; }
+	
+	public Color getTankColor() { return Color.white; }
+	public void setTankColor(Color color) {}
+	
+	public Color getCatColor() { return Color.white; }
+	public void setCatColor(Color color) {}
+	
+	public Color getTurretColor() { return Color.white; }
+	public void setTurretColor(Color color) {}
 }
